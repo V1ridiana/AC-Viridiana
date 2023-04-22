@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -100,7 +100,7 @@ Sin embargo, podemos controlar el _nivel de detalle_ de nuestra gráfica control
 
 # ╔═╡ d2472d6a-7072-49ae-ba55-207db17be3ca
 begin
-	l = 2            #¡Cambia el valor asignado a l, ejecuta la celda
+	l = 2 #¡Cambia el valor asignado a l, ejecuta la celda
 	plot(sin,0:l:2π) #y observa qué sucede con la gráfica!
 end
 
@@ -182,6 +182,18 @@ md"por lo que no es necesario llamar dos funciones cuando querramos hacer esto. 
 md""" **Ejercicio** Define un parámetro interactivo `d` que controle el nivel de detalle de una gráfica tipo `plot` de las funciones `sin` y `cos` en el intervalo $[-\pi,\pi]$, con el título "Funciones trigonométricas", donde cada función se grafique con un color diferente y la leyenda indique el nombre de cada función.
 
 """
+
+# ╔═╡ ad25d8db-c1e0-40e3-9e12-00f3f376ea75
+@bind d Slider(0.01:0.04:2, default=0.5)
+
+# ╔═╡ e916fc86-d9bd-4f80-a75f-8e0ec3bac9ac
+#Usamos plot para visualizar la grafica para sen y cos entre -pi y pi
+#Tambien definimos propiedades de la grafica, como el titulo o los encabezados.
+begin
+plot(sin,-π:d:π, title = "Funciones trigonométricas", xlabel = "x", ylabel = "y", color = "magenta4", label = "Sin(x)")
+plot!(cos,-π:d:π, color = "deeppink", label = "Cos(x)")
+
+end
 
 # ╔═╡ acfe0334-c7aa-471f-b39e-8276e2e3dd42
 md"""#### El paquete `LaTeXStrings`
@@ -448,21 +460,106 @@ md"""**Ejercicio** Haz un código donde definas cuatro variables `h`, `r`, `θ` 
 
 Sugerencia: Repasa las ecuaciones cinemáticaticas del tiro parabólico e investiga los atributos `xaxis` y `yaxis` para poder fijar los ejes de la gráfica durante la animación."""
 
-# ╔═╡ 50f7f46b-081e-4b07-94af-1331b33a7c7f
-#Tu código (comentado) va aquí :D
+# ╔═╡ 4db0cd26-5af6-4752-8db8-e843d5b47dce
+#Definimos las variables h, r, θ y t y les asignamos un valor
+begin
+	H = 3    #Altura (Metros)
+	r = 35      #Rapidez inical (En metros/s)
+	θ = π/10    #Ángulo (Radianes) 
+	G = 9.81    #Graverdad 9.81 (m/s^2)
+	P(t) = t*tan(θ)-((G*t^2)/(2*r^2*(cos(θ))^2))+H # Función de lo posición.
+end
+
+# ╔═╡ 588b43e6-9abf-4838-8c7c-3531296e5a81
+#Declaracion y calculo de la variable resultante de calcular el tiempo que tarda en tocar el piso
+Time=(r*sin(θ)+sqrt(r^2*(sin(θ))^2+2*G*H))/(G) 
+
+# ╔═╡ 3558261d-1dff-4d9c-b93d-8b7602bf8f66
+#Calculamos el alcance del tiro, es decir, cuando la partícula toca el suelo
+T=r*cos(θ)*Time 
+
+# ╔═╡ ba142aac-08df-412a-84b1-086df6921bc6
+#Para graficar el tiro parabolico usamos scatter y definimos propiedades de la grafica.
+begin
+	scatter(P,0:T, title = "Tiro parabólico", xlabel = "x", ylabel = "y", color = "red", label = "Recorrido")
+end
+
+# ╔═╡ 9208f94d-ef81-4ea4-88b6-a940015cc0b9
+#Declaracion y calculo de la altura maxima
+M=H+(r^2*(sin(θ))^2)/(2*G) 
+
+# ╔═╡ 57e8e943-3b03-4fb7-ad10-cd0e63145526
+#Para poder visualizar el tiro parabolico como animacion, definimos lo siguiente:
+begin
+		x(t)=r*cos(θ)*t             #Posición en x
+		y(t)=H+r*sin(θ)*t-(G*t^2)/2 #Posición en y
+		t=0:0.1:Time                #Pasos a dar, desde el tiempo 0 hasta que toque el suelo, es decir, hasta Time
+		n=length(t)                 
+		xpos=x.(t)                  #Posición en x en el tiempo t
+		ypos=y.(t)                  #Posición en y en el tiempo t
+	begin
+	anima = @animate for i in 1:n # para t ∈ 0:n
+		scatter([xpos[i]], [ypos[i]], legend=:none, title="Trayectoria", markersize=2, markercolor="orangered", xaxis=("x", (0,T+T/10)), yaxis=("y", (0, M+M/10)), dpi=300) 
+	end	
+		gif(anima,"aminaciontiro.mp4",fps=50)
+	end
+end
 
 # ╔═╡ 59ec3890-303c-436a-8043-8e6bc9c427ed
 md"**Ejercicio** Crea una función que tome parámetros `h`, `r`, `θ` y `t`, y haga lo descrito en el Ejercicio anterior."
 
 # ╔═╡ c3264b4d-81b1-4e0c-9205-ff818665788c
-#Tu código (comentado) va aquí :D
+#Definimos una funcion para calcular la posicion de la particula en el tiempo t usando los parametros  h, r, θ y t
+begin
+function animate_parabolic_shot(h, r, θ, t)
+    
+    function calculate_position(ti)
+        x = r * cos(θ) * ti
+        y = h + r * sin(θ) * ti - 0.5 * 9.81 * ti^2
+        return (x, y)
+    end
+
+    #Definimos la posicion inicial de la particula
+    (x, y) = calculate_position(0)
+
+    #Creamos la animacion con ayuda de @animate
+    anim = @animate for ti=0:0.1:t
+        x, y = calculate_position(ti)
+        plot(legend=false,title="Función parabolic_shot", xlabel = "x", ylabel = "y", xlim=(0, r * cos(θ) * t), ylim=(0, h + r * sin(θ) * t))
+        scatter!([x], [y], marker=:circle, markersize=8, color=:red)
+        plot!([0, x], [h, y], linestyle=:dash, color=:blue)
+    end
+
+    #Guardamos la animacion como un archivo tipo gif
+    gif(anim, "parabolic_shot.gif", fps=10)
+end
+
+end
+
+# ╔═╡ 71ab0d22-bb3d-4774-b46b-9feb75503504
+#Llamamos a la funcion para poder viualizarla
+animate_parabolic_shot(0, 10, π/4, 2.0)
 
 # ╔═╡ 77aacd79-26e3-40c2-ac22-f9121aac4155
 md"""**Ejercicio** Crea una animación de cómo la superficie obtenida de la función $h(x,y) = \cos(x) + \sin(y)$ se desplaza hacia el eje vertical.
 """
 
-# ╔═╡ 4e68ad0c-17ef-41f7-b9fe-8561415bb7f2
-#Tu código (comentado) va aquí :D
+# ╔═╡ 6d70371d-048a-475a-9e26-3dc031d167ce
+#Primero definimos a la funcion
+begin
+	X = Y = range(-2π, 2π, length = 40) #Definimos a X y Y
+	Z(X,Y)=sin(X)+cos(Y) #Nombre a la funcion de esta manera para no repetir nombres de variables:)
+	ani = Plots.Animation()
+	
+	 #Anima de menos 2pi a 2pi, grafica con el arreglo X,Y,Z, muestra un mapa de color
+	begin
+	ani = @animate for t in -2π:0.5:2π 
+		plot!(X, Y, Z, st = [:surface])
+		Plots.frame(ani)
+	end
+	gif(ani, "Z(X,Y)=sin(X)+cos(y)", fps = 30)
+	end
+end
 
 # ╔═╡ 88299b4d-2a7d-4c18-956e-c6e75473c658
 md" ## Recursos complementarios
@@ -1449,6 +1546,8 @@ version = "0.9.1+5"
 # ╠═fc94b6e8-cae9-46bc-9ac4-9cee5e86c8ee
 # ╟─77a60b5d-ad7f-4c44-a68d-694417619668
 # ╟─8b8aff3c-3d88-4022-bc86-b75ebefde2a3
+# ╠═ad25d8db-c1e0-40e3-9e12-00f3f376ea75
+# ╠═e916fc86-d9bd-4f80-a75f-8e0ec3bac9ac
 # ╟─acfe0334-c7aa-471f-b39e-8276e2e3dd42
 # ╠═8302701b-02ac-4d35-b7de-5dec8fe701fb
 # ╟─02f9778e-21c8-42db-bed6-95a20d592f22
@@ -1487,11 +1586,17 @@ version = "0.9.1+5"
 # ╠═765a0e10-4217-4a50-8fb1-e46bee83aaa6
 # ╟─abbce622-7912-40ee-8632-261b5129dcb4
 # ╟─7577805b-1d52-47e4-aa45-2652943db1cf
-# ╠═50f7f46b-081e-4b07-94af-1331b33a7c7f
+# ╠═4db0cd26-5af6-4752-8db8-e843d5b47dce
+# ╠═588b43e6-9abf-4838-8c7c-3531296e5a81
+# ╠═3558261d-1dff-4d9c-b93d-8b7602bf8f66
+# ╠═ba142aac-08df-412a-84b1-086df6921bc6
+# ╠═9208f94d-ef81-4ea4-88b6-a940015cc0b9
+# ╠═57e8e943-3b03-4fb7-ad10-cd0e63145526
 # ╟─59ec3890-303c-436a-8043-8e6bc9c427ed
 # ╠═c3264b4d-81b1-4e0c-9205-ff818665788c
+# ╠═71ab0d22-bb3d-4774-b46b-9feb75503504
 # ╟─77aacd79-26e3-40c2-ac22-f9121aac4155
-# ╠═4e68ad0c-17ef-41f7-b9fe-8561415bb7f2
+# ╠═6d70371d-048a-475a-9e26-3dc031d167ce
 # ╟─88299b4d-2a7d-4c18-956e-c6e75473c658
 # ╟─00000000-0000-0000-0000-000000000001
 # ╟─00000000-0000-0000-0000-000000000002

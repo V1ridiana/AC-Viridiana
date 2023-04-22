@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -157,6 +157,10 @@ Para hacer gráficas de pastel (o **_pie charts_**), utilizamos la función `pie
 # ╔═╡ 4d0558b2-f7b0-402f-899b-b07477083126
 pie(["Windows","Mac","GNU/Linux"], [18,2,4],
 	title="Sistemas operativos utilizados por el grupo (2022-II)")
+
+# ╔═╡ b2b65928-b280-4c67-951a-c5b2d267a400
+pie(["Windows","Mac","GNU/Linux"], [28,3,1],
+	title="Sistemas operativos utilizados por el grupo (2023-II)")
 
 # ╔═╡ 41cdba33-6d38-4c9a-ba36-31a929bf4e96
 md"""## Mapas de calor
@@ -1402,6 +1406,7 @@ version = "0.9.1+5"
 # ╠═094abf25-8e17-4f40-837c-082e59b19512
 # ╟─85fd570b-a212-4f6e-9288-6d190209152e
 # ╠═4d0558b2-f7b0-402f-899b-b07477083126
+# ╠═b2b65928-b280-4c67-951a-c5b2d267a400
 # ╟─41cdba33-6d38-4c9a-ba36-31a929bf4e96
 # ╠═e8dcb3aa-20bd-4d5f-be64-62e38a6a1fe2
 # ╠═6eefbe35-5e13-4818-9935-ac9882ba8fb9

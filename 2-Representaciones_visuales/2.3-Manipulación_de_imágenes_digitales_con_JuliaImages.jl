@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -124,6 +124,36 @@ nariz = michi[rango_renglones, rango_columnas]
 
 # ╔═╡ 768e7b46-f7ef-44f8-b69f-f0a9fd4d797f
 md"**Ejercicio** Define una variable `arte_de_pixeles` como un arreglo bidimensional pequeño de `8x8` entradas con todas las celdas en blanco. Luego, edita las celdas de tu arreglo para hacer un poco de arte de pixeles (¡Habrá puntos extra para las imágenes más **originales**!). Pueden consultar algunas imágenes para tomar inspiración [aquí](https://duckduckgo.com/?q=pixel+art&t=h_&iax=images&ia=images)."
+
+# ╔═╡ 06dacc5d-9740-4b15-bad5-f4a78b845679
+begin
+
+# Primero definimos un variable que cree el arreglo bidimensional de 8x8 de celdas blancas
+arte_de_pixeles = fill(RGB{Float64}(1, 1, 1), 8, 8)
+
+# Ahora, editamos algunas celdas para crear un patrón en forma de estrella, para ello se coloca un color azul	
+
+arte_de_pixeles[1, 4] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[2, 3] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[2, 5] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[3, 2] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[3, 4] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[3, 6] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[4, 1] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[4, 3] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[4, 5] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[4, 7] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[5, 2] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[5, 4] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[5, 6] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[6, 3] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[6, 5] = RGB{Float64}(0, 0, 1)
+arte_de_pixeles[7, 4] = RGB{Float64}(0, 0, 1)
+
+# Ahora solo llamamos a la variable para mostrar el resultado
+arte_de_pixeles
+	
+end
 
 # ╔═╡ 8270b927-ac96-4e45-8c26-47995b036313
 md""" ## Guardar imágenes
@@ -1457,6 +1487,7 @@ version = "0.9.1+5"
 # ╠═25541a59-3f11-4d5c-afe9-0e3a287ca5c2
 # ╠═176d687c-acf1-4516-9c45-0f52800bfcf3
 # ╟─768e7b46-f7ef-44f8-b69f-f0a9fd4d797f
+# ╠═06dacc5d-9740-4b15-bad5-f4a78b845679
 # ╟─8270b927-ac96-4e45-8c26-47995b036313
 # ╠═3e886602-1dbe-4000-8993-eab5d9edae54
 # ╟─47dbad09-c809-4a65-b25b-f3e049efb69f
