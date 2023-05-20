@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.19
+# v0.19.22
 
 using Markdown
 using InteractiveUtils
@@ -225,30 +225,72 @@ $$x(t_1) \approx C_0 + hg(t_0,x(t_0)).$$
 # ╔═╡ 8655c243-679b-46fb-b506-a0b035e902b7
 md""" ### Implementación del método de Euler
 
-**Ejercicio** Crea una función `tamañoDePaso` que tome argumentos `t0`, `tf` y `N`, donde
+**Ejercicio** Crea una función `tamañoDePaso` con parámetros `t0`, `tf` y `N`, donde
 * `t0` es el tiempo inicial de un problema de condiciones iniciales,
 * `tf` es el tiempo final en el que queremos aproximar una solución a dicho problema, y
-* `N` es un número entero positivo,
+* `N` es el número de puntos en los que queremos aproximar nuestra solución,
 
-y devuelva el tamaño de paso $h$ correspondiente.
+y devuelva el tamaño de paso $h$ correspondiente, imprimiendo un mensaje de error si $h$ **no** es entero positivo.
 
 """
 
 # ╔═╡ 643043b9-ae20-4071-9367-b282f2654fd7
-# Tu código va aquí :)
+# Definición de la función tamañoDePaso
+function tamañoDePaso(t0a, tfa, Na)
+	# Verifica si Na no es un entero positivo
+    if !isinteger(Na) || Na <= 0
+        error("N debe ser un entero positivo.")
+    end
+
+	# Calcula el tamaño de paso ha
+    ha = (tfa - t0a) / Na
+    return ha
+end
+
+# ╔═╡ f5b8d582-8273-4d5e-84c5-f47f9adb5682
+begin
+	t0a = 0.0  # Tiempo inicial
+    tfa = 1.0  # Tiempo final
+    Na = 10    # Número de puntos
+
+# Llamada a la función e imprime
+ha = tamañoDePaso(t0a, tfa, Na)
+println("Tamaño de paso: ", ha)
+
+end
 
 # ╔═╡ c84d2b95-07a4-45f8-8e7e-e372acc89cb8
-md" **Ejercicio** Crea una función `arregloUniforme` que tome los mismos argumentos que `tamañoDePaso` **más** un argumento `h` para el tamaño de paso y devuelva un arreglo uniforme de números desde `t0` hasta `tf` con dicho tamaño de paso entre ellos. Esta función debe imprimir un mensaje de error si $N$ **no** es un entero positivo. "
+md" **Ejercicio** Crea una función `arregloUniforme` que tome los mismos tres parámetros del **Ejercicio** anterior y devuelva un arreglo uniforme de números desde `t0` hasta `tf` con el tamaño de paso dado por `tamañoDePaso`. "
 
 # ╔═╡ b0eb99e9-978a-4914-90a9-e05c73115e73
-# Tu código (comentado) va aquí :)
+# Definición de la función arregloUniforme
+function arregloUniforme(t0b, tfb, Nb)
+
+	# Calcula el tamaño de paso utilizando la función tamañoDePaso
+    hb = tamañoDePaso(t0b, tfb, Nb)
+
+	# Crea un arreglo uniforme de tiempos utilizando el tamaño de paso
+    tb = range(t0b, stop=tfb, step=hb)
+    return tb
+end
+
+# ╔═╡ 5b7a6f0f-ae36-41b5-ad71-91139274cea4
+begin
+t0b = 0.0  # Tiempo inicial
+tfb = 1.0  # Tiempo final
+Nb = 10    # Número de puntos
+
+# Llamada a la función arregloUniforme e imprime
+tb = arregloUniforme(t0b, tfb, Nb)
+println("Arreglo uniforme de tiempos: ", tb)
+end
 
 # ╔═╡ fa999314-0038-498a-ac9e-3ce04a9435a3
-md""" **Ejercicio** Crea una función `paso_euler` que tome argumentos `ti`, `xti`, `g` y `h`, donde
+md""" **Ejercicio** Crea una función `pasoEuler` con parámetros `ti`, `xti`, `g` y `h`, donde
 
 * `ti` es un valor de tiempo,
-* `xti` es una aproximación de $x(t_i)$, donde $x$ es la solución al problema de condiciones iniciales $(2),(3)$,
-* `g` es la función de $x$ y $t$ dada por la ecuación $(2)$, y
+* `xti` es una aproximación de $x(t_i)$, donde $x$ es la solución al problema de condiciones iniciales $(3-4)$,
+* `g` es la función de $x$ y $t$ dada por la ecuación $(3)$, y
 * `h` es el tamaño de paso de nuestro arreglo uniforme,
 
 y devuelva una aproximación de $x(t_{i+1})$.
@@ -256,42 +298,210 @@ y devuelva una aproximación de $x(t_{i+1})$.
 """
 
 # ╔═╡ ecf4e2e8-821d-4e32-82d8-5eaec50363c3
-# Tu código (comentado) va aquí :)
+# Definición de la función pasoEuler
+function pasoEuler(ti, xti, g, h)
+   # Calcula la aproximación de x(ti+1) utilizando la fórmula del método de Euler
+	xi = xti + h * g(xti, ti)
+    return xi
+end
+
+# ╔═╡ 1a3fa3c9-4ac7-443e-8535-1b9b8769a381
+begin
+ti = 0.0      # Valor de tiempo
+xti = 1.0    # Aproximación de x(ti)
+g(x, t) = x  # Función g de x y t
+h = 0.1      # Tamaño de paso
+
+# Llamada a la función pasoEuler e imprime la aproximacion
+xi = pasoEuler(ti, xti, g, h)
+println("Aproximación de x(ti+1): ", xi)
+end
 
 # ╔═╡ 1ec8d06d-160f-49de-a1aa-25c9d17cce64
-md""" **Ejercicio** Crea una función `euler` que tome argumentos `g`, `xt0` y `t`, donde
+md""" **Ejercicio** Crea una función `euler` con parámetros `g`, `xt0` y `T`, donde
 
-* `g` es la función de $x$ y $t$ dada por la ecuación $(2)$,
-* `xt0` es la condición inicial dada por la ecuación $(1)$, y
-* `t` es un arreglo uniforme de "tiempos" de la forma $\big\{t_0 + i\big(\frac{t_f-t_0}{N}\big) \mid N\in\mathbb{Z}^+, \ 0\leq i\leq N\big\}$,
+* `g` es la función de $x$ y $t$ dada por la ecuación $(3)$,
+* `xt0` es la condición inicial dada por la ecuación $(4)$, y
+* `T` es un arreglo uniforme de "tiempos" de la forma $\{t_0 + ih \mid h\in\mathbb{R}^+, i\in\mathbb{N}, 0\leq i\leq N\}$,
 
-y devuelva un arreglo con `xt0` y los valores aproximados de $x(t_i)$ para $1\leq i\leq N$, calculados mediante el método de Euler. (Sugerencia: utiliza las funciones definidas anteriormente.)
+y devuelva un arreglo con `xt0` y los valores aproximados de $x(t_i)$ para $1\leq i\leq N$, calculados mediante el método de Euler.
+
+**Sugerencia**: Utiliza algunas de las funciones definidas anteriormente.
 
 """
 
 # ╔═╡ 7c8c2188-3173-4202-8ba4-83554831d940
-# Tu código (comentado) va aquí :)
+# Definición de la función euler
+function euler(gc, xt0c, Tc)
+	# Número de elementos en el arreglo de tiempos T
+    N = length(Tc)
+	# Creación de un arreglo X con la misma estructura que T
+    X = similar(Tc)
+	# Asignación de la condición inicial xt0 al primer elemento de X
+    X[1] = xt0c
+    
+    for i in 1:N-1
+		# Valor de tiempo en la posición i
+        ti = Tc[i]
+		# Aproximación de x(ti) en la posición i
+        xti = X[i]
+		# Tamaño de paso h entre ti y ti+1
+        h = Tc[i+1] - ti
+		# Cálculo de la aproximación de x(ti+1) utilizando el método de Euler y se guarda en X[i+1]
+        X[i+1] = pasoEuler(ti, xti, gc, h)
+    end
+    # Devuelve el arreglo X con las aproximaciones de x(ti)
+    return X
+end
+
+# ╔═╡ 640a7130-155b-419d-b310-ea729f6b6781
+begin
+gc(x, t) = x        # Función g de x y t
+xt0c = 1.0          # Condición inicial x(t0)
+Tc = [0.0, 0.1, 0.2, 0.3]  # Arreglo uniforme de tiempos
+
+# Llamada a la función euler y se imprime el arreglo X con las aproximaciones de x(ti)
+X = euler(gc, xt0c, Tc)
+println("Aproximación de x(ti): ", X)
+end
 
 # ╔═╡ 1dc4a3c3-6b1c-4024-bfaf-ce72f5533209
 md"""
+**Ejercicio** En caso de que la función $g$ de la EDO $(3)$ sólo dependa del tiempo, ¿qué operación matemática estaríamos llevando a cabo al aplicar el método de Euler?
 
-**Ejercicio** En caso de que la función $g$ de la EDO $(2)$ sólo dependa del tiempo, ¿qué operación matemática estaríamos llevando a cabo al aplicar el método de Euler?
+En caso de que la función g de la EDO (3) solo dependa del tiempo, al aplicar el método de Euler estaríamos realizando una aproximación numérica de la ecuación diferencial ordinaria (EDO) mediante la integración numérica. En este caso, la ecuación diferencial se reduce a una ecuación diferencial ordinaria de primer orden:
 
-_Tu respuesta va aquí._
+$$\begin{align*} dx/dt = g(t)(5) \end{align*}$$
+
+El método de Euler aproxima la solución de la EDO (5) en el intervalo [t0, tf] mediante una sucesión de valores discretos de la variable dependiente x. Utilizando el tamaño de paso h, calculamos iterativamente los valores de x(ti) a partir del valor inicial x(t0) y la función g(t) evaluada en cada punto de la siguiente manera:
+
+$$\begin{align*} x(t_i+1) = x(t_i) + h * g(t_i)\end{align*}$$  
+para todo i en $$\begin{align*} {0, 1, ..., N-1}\end{align*}$$
+
+De esta forma, el método de Euler aproxima la solución de la EDO (5) mediante una serie de pasos discretos en el tiempo, actualizando el valor de la función en cada punto basándose en la pendiente (o la tasa de cambio) proporcionada por la función g(t).
 
 Verifica que tu implementación del método de Euler sea correcta aplicándola a alguna función `g` sencilla que sólo dependa del tiempo y comparando los resultados obtenidos con la solución analítica; recuerda que debes imponer una condición inicial.
 
 """
 
-# ╔═╡ d821fc74-b60f-4571-bd82-44b4f7ece230
-#= Tu código (comentado) va aquí :)
-   También puedes agregar celdas para discutir tus resultados. =#
+# ╔═╡ 3f61b06d-b6ad-41b6-8021-b4296f19614c
+md"""Para verificar la implementacion usamos la función $g(t) = 2t$ como ejemplo.
+
+La ecuación diferencial asociada sería: $dx/dt = 2t$ con la condición inicial $x(0) = 1$.
+
+La solución analítica de esta ecuación es: $x(t) = t^2 + C,$ donde C es la constante determinada por la condición inicial.
+
+Implementemos el método de Euler y comparemos los resultados obtenidos con la solución analítica."""
+
+# ╔═╡ e7aca2a3-0c15-429c-8c40-4630a9f1e220
+begin
+	# Definición de la función g que solo depende del tiempo
+	ge(t) = -2t
+	
+	# Definición de la solución analítica
+	function solucion_analiticae(t, C)
+	    return -t^2 + C
+	end
+	
+	# Implementación del método de Euler
+	function euler_tiempo(ge, xt0e, Te)
+		#Número total de puntos en el arreglo T
+	    Ne = length(Te)
+		# Se crea un arreglo X con la misma longitud que T para almacenar las aproximaciones de x(ti)
+	    X = similar(Te)
+		# Se asigna el valor inicial xt0 a X[1], ya que conocemos la condición inicial.
+	    X[1] = xt0e
+
+		#El ciclo for itera desde i = 1 hasta N - 1, ya que en cada iteración calcularemos el siguiente valor de x(ti)
+	    for i in 1:N-1
+	        ti = Te[i]
+	        xti = X[i]
+	        h = Te[i+1] - ti
+	        X[i+1] = xti + h * ge(ti)
+	    end
+	    # se devuelve el arreglo X con las aproximaciones de x(ti)
+	    return X
+	end
+end
+
+# ╔═╡ 2a29eed6-2fbf-4d42-bbf0-85fb1d93cc93
+begin
+	# Parámetros del problema
+	xt0e = 1.0  # Condición inicial
+	Te = range(0.0, stop=1.0, length=11)  # Arreglo uniforme de tiempos
+	
+	# Aplicación del método de Euler
+	X_euler = euler_tiempo(ge, xt0e, Te)
+	
+	# Cálculo de la solución analítica
+	X_analiticae = solucion_analiticae.(Te, xt0e)
+
+	# Imprimir los resultados
+		println("Aproximación de x(ti) utilizando el método de Euler: ", X_euler)
+		println("Solución analítica de x(ti): ", X_analiticae)
+end
 
 # ╔═╡ c44f5b44-8899-444a-b5c4-f87e98102013
-md""" **Ejercicio** Utiliza tu implementación del método de Euler para solucionar el problema de condiciones iniciales $(1),(2)$. Grafica tu resultado junto con la gráfica de la solución analítica encontrada en el **Ejemplo** de la sección "Condiciones iniciales" y haz interactivo el parámetro $N$ para observar cómo cambia la aproximación que da tu solución numérica de la solución analítica en función del número de puntos utilizados en el intervalo $[t_0,t_f]$. """
+md""" **Ejercicio** Utiliza tu implementación del método de Euler para solucionar el problema de condiciones iniciales $(1-2)$. Grafica tu resultado junto con la gráfica de la solución analítica encontrada en el **Ejemplo** de la sección "Condiciones iniciales" y haz interactivo el parámetro $N$ para observar cómo cambia la aproximación que da tu solución numérica de la solución analítica en función del número de puntos en el intervalo $[t_0,t_f]$. """
 
-# ╔═╡ 80b45143-b908-4f89-bb6f-1cb500529ea9
-# Tu código (comentado) va aquí :)
+# ╔═╡ 691d2c66-3d02-4866-9c8d-5fa4eac09f5c
+begin
+function euler_method(gd, t0d, tfd, x0d, Nd)
+	# Calcula el tamaño de paso
+    hd = (tfd - t0d) / Nd
+	# Crea un arreglo uniforme de puntos en el intervalo [t0d, tfd]
+    t = range(t0d, stop=tfd, length=Nd+1)
+	# Crea un arreglo para almacenar las aproximaciones de x(ti)
+    x = zeros(Float64, Nd+1)
+	# Asigna la condición inicial
+    x[1] = x0d
+
+	# Aplica el método de Euler para aproximar x(ti+1)
+    for i in 1:Nd
+        x[i+1] = x[i] + hd * gd(t[i], x[i])  # Actualizar la función gd para que tome en cuenta x[i]
+    end
+    
+    return t, x
+end
+
+# Función g que depende del tiempo y de la variable x
+function gd(t, x)
+    return x
+end	
+end
+
+# ╔═╡ 7dab09b3-f381-429c-afdf-d018fd327122
+begin
+# Parámetros del problema
+t0d = 0.0
+tfd = 2.0
+x0d = 5.0
+Nd = 10
+
+# Aplicar el método de Euler
+t_euler, x_euler = euler_method(gd, t0d, tfd, x0d, Nd)
+
+# Solución analítica
+t_analytic = range(t0d, stop=tfd, length=100)
+x_analytic = x0d * exp.(t_analytic)
+end
+
+# ╔═╡ f6fd3f5c-302c-4612-9d15-99992ceffcb1
+begin
+# Graficar los resultados
+plot(t_euler, x_euler, marker=:circle, label="Euler Method")
+plot!(t_analytic, x_analytic, label="Analytic Solution")
+xlabel!("t")
+ylabel!("x")
+title!("Método de Euler - Condiciones iniciales")
+end
+
+# ╔═╡ 60b05fa6-aea0-42d6-bc3a-66c1dd537161
+md"""En este código, hemos modificado la función g para que tome en cuenta el valor actual de x en cada paso. Esto se logra pasando x[i] como argumento adicional en la función g. Además, hemos actualizado los parámetros t0, tf, x0 y N para reflejar los valores del problema de condiciones iniciales $(1-2)$ que has proporcionado.
+
+La solución analítica se calcula como $x_(analytic) = x0 * exp.(t_(analytic))$, donde exp. es la función exponencial aplicada elemento a elemento en el vector $t_analytic$.
+
+Al ejecutar el código, obtendrás una gráfica que muestra la aproximación del método de Euler y la solución analítica para el problema de condiciones iniciales $(1-2)$. Puedes ajustar el parámetro N para observar cómo cambia la aproximación numérica en función del número de puntos en el intervalo $[t_0, t_f]$."""
 
 # ╔═╡ e0081798-1e7e-47b3-a7d2-1d0f29d59990
 md""" ## Nota final
@@ -1320,16 +1530,25 @@ version = "0.9.1+5"
 # ╟─858b97dd-c384-49cd-981a-e2a29ffbfb2a
 # ╟─8655c243-679b-46fb-b506-a0b035e902b7
 # ╠═643043b9-ae20-4071-9367-b282f2654fd7
+# ╠═f5b8d582-8273-4d5e-84c5-f47f9adb5682
 # ╟─c84d2b95-07a4-45f8-8e7e-e372acc89cb8
 # ╠═b0eb99e9-978a-4914-90a9-e05c73115e73
+# ╠═5b7a6f0f-ae36-41b5-ad71-91139274cea4
 # ╟─fa999314-0038-498a-ac9e-3ce04a9435a3
 # ╠═ecf4e2e8-821d-4e32-82d8-5eaec50363c3
+# ╠═1a3fa3c9-4ac7-443e-8535-1b9b8769a381
 # ╟─1ec8d06d-160f-49de-a1aa-25c9d17cce64
 # ╠═7c8c2188-3173-4202-8ba4-83554831d940
+# ╠═640a7130-155b-419d-b310-ea729f6b6781
 # ╟─1dc4a3c3-6b1c-4024-bfaf-ce72f5533209
-# ╠═d821fc74-b60f-4571-bd82-44b4f7ece230
+# ╟─3f61b06d-b6ad-41b6-8021-b4296f19614c
+# ╠═e7aca2a3-0c15-429c-8c40-4630a9f1e220
+# ╠═2a29eed6-2fbf-4d42-bbf0-85fb1d93cc93
 # ╟─c44f5b44-8899-444a-b5c4-f87e98102013
-# ╠═80b45143-b908-4f89-bb6f-1cb500529ea9
+# ╠═691d2c66-3d02-4866-9c8d-5fa4eac09f5c
+# ╠═7dab09b3-f381-429c-afdf-d018fd327122
+# ╠═f6fd3f5c-302c-4612-9d15-99992ceffcb1
+# ╟─60b05fa6-aea0-42d6-bc3a-66c1dd537161
 # ╟─e0081798-1e7e-47b3-a7d2-1d0f29d59990
 # ╟─84f733e5-8e7a-4df7-880d-49ca09683257
 # ╟─fc7efcf9-70ca-4c3d-9822-720c67dcc7f7
