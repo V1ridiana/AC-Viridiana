@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.19.22
+# v0.19.26
 
 using Markdown
 using InteractiveUtils
@@ -43,78 +43,78 @@ Caso 2: 2 opciones, las cuales son:
 
 Caso 3: 3 opciones, las cuales son: 
 
-*1 salto+1 salto+1 salto 
+* 1 salto + 1 salto + 1 salto 
 
-*1 salto+2 salto 
+* 1 salto + 2 saltos 
 
-*2 salto+1 salto
+* 2 saltos + 1 salto
 
 Caso 4: 5 opciones, las cuales son:
 
-*1 salto+1 salto+1 salto+1 salto
+* 1 salto + 1 salto + 1 salto + 1 salto
 
-*1 salto+1 salto+2 salto
+* 1 salto + 1 salto + 2 salto
 
-*2 salto+1 salto+1 salto
+* 2 saltos + 1 salto + 1 salto
 
-*1 salto+2 salto+1 salto
+* 1 salto + 2 saltos + 1 salto
 
-*2 salto+2 salto
+* 2 saltos + 2 saltos
 
 Caso 5: 8 opciones, las cuales son:
 
-*1 salto+1 salto+1 salto+1 salto 1 salto
+* 1 salto + 1 salto + 1 salto+1 salto + 1 salto
 
-*1 salto+1 salto+1 salto+2 salto
+* 1 salto + 1 salto + 1 salto + 2 saltos
 
-*1 salto+1 salto+2 salto+1 salto
+* 1 salto + 1 salto + 2 saltos + 1 salto
 
-*1 salto+2 salto+1 salto+1 salto
+* 1 salto + 2 saltos + 1 salto + 1 salto
 
-*2 salto+1 salto+1 salto+1 salto
+* 2 saltos + 1 salto + 1 salto + 1 salto
 
-*1 salto+2 salto+2 salto
+* 1 salto + 2 saltos + 2 saltos
 
-*2 salto+1 salto+2 salto
+* 2 saltos + 1 salto + 2 saltos
 
 Caso 6: 13 opciones, las cuales son:
 
-*1 salto+1 salto+1 salto+1 salto+1 salto+1 salto
+* 1 salto + 1 salto+1 salto+1 salto+1 salto+1 salto
 
-*1 salto+1 salto+1 salto+1 salto+2 salto
+* 1 salto + 1 salto + 1 salto + 1 salto + 2 saltos
 
-*1 salto+1 salto+1 salto+2 salto+1 salto
+* 1 salto + 1 salto + 1 salto + 2 saltos + 1 salto
 
-*1 salto+1 salto+2 salto1 salto+1 salto
+* 1 salto + 1 salto + 2 saltos + 1 salto + 1 salto
 
-*1 salto+2 salto+1 salto+1 salto+1 salto
+* 1 salto + 2 saltos + 1 salto + 1 salto + 1 salto
 
-*2 salto+1 salto+1 salto+1 salto+1 salto
+* 2 saltos + 1 salto + 1 salto + 1 salto + 1 salto
 
-*2 salto+2 salto+1 salto+1 salto
+* 2 saltos + 2 saltos + 1 salto + 1 salto
 
-*2 salto+1 salto+2 salto+1 salto
+* 2 saltos + 1 salto + 2 saltos + 1 salto 
 
-*2 salto+1 salto+1 salto+2 salto
+* 2 saltos + 1 salto + 1 salto + 2 saltos
 
-*1 salto+2 salto+2 salto+1 salto
+* 1 salto + 2 saltos + 2 saltos + 1 salto
 
-*1 salto+1 salto+2 salto+2 salto
+* 1 salto + 1 salto + 2 salto + 2 saltos
 
-*1 salto+2 salto+1 salto+2 salto
+* 1 salto + 2 saltos + 1 salto + 2 saltos
 
-*2 salto+2 salto+2 salto
+* 2 saltos + 2 saltos + 2 saltos
 
 Por lo que entonces podemos ver que la sucesión númerica que sigue el problema es una secuencia fibonacci, por lo que entonces se propone realizar una operación que cumpla con esta secuencia.
 
 **OBS**. los resultados anteriores se resumen en lo siguiente:
 
--n=1 entonces N=1
--n=2 entonces N=2
--n=3 entonces N=3
--n=4 entonces N=5
--n=5 entonces N=8
--n=6 entonces N=13
+* n=1 entonces N=1
+* n=2 entonces N=2
+* n=3 entonces N=3
+* n=4 entonces N=5
+* n=5 entonces N=8
+* n=6 entonces N=13
 
 Donde además podemos ver que para obtener _N_ podemos sumar los 2 resultados anteriores, es decir para _N=8_ entonces sumo 5+3, para _N=13_ entonces sumo 5+8, lo cual nos será de ayuda para implementar nuestro código.
 
@@ -160,6 +160,9 @@ imprimir: El número de distintas combinaciones que se pueden hacer para x= Nume
 fin
 "
 
+# ╔═╡ e6dfa89b-1ad8-4e31-bd55-37365ff4cf4d
+html"""<font color='orange'> ¡Excelente! Al enfrentarnos a un problema que lo permita, a menudo es muy útil hacer algunos cálculos para tener datos "experimentales" a partir de los cuales poder hacer observaciones cruciales que faciliten la solución del mismo, así como ustedes lo hicieron, lo cual me alegra mucho. <b>(3/3 puntos)</b></font>"""
+
 # ╔═╡ 588c8811-3b8e-4b46-9fff-c17f1b6f19f5
 md"2. Implementa este algoritmo en Julia. La idea es que tu programa reciba un entero n (el tamaño del río), y devuelva N, el número de formas distintas que la rana puede cruzar **(5 puntos)**. Tu programa será aceptado si devuelve el valor correcto de N para cada valor de n, con _1 ≤ n ≤ 45_"
 
@@ -191,7 +194,7 @@ md"**OBS**.Si se quiere saber el número de saltos para un valor puntual, solo b
 
 # ╔═╡ a4f2fda5-c511-4e47-8c80-f09fff4ce47f
 md"**Nota:**
-Como podemos visualizar, este codigo realiza la implementacion de la solucion, solo mostrando el numero de saltos que hace la ranita, sin embargo, no se muestra una especificacion completa sobre los saltos subsecuentes que hace la ranita debido a que al intentar implementar lo anterior se tenia sobreflujo en el codigo. Por lo que se propuso una solucion donde en lugar de especificar los saltos subscuentes que realiza la ranita, se imprimia un Hint sobre como tenia que empezar a saltar la ranita"
+Como podemos visualizar, este codigo realiza la implementacion de la solución, solo mostrando el número de saltos que hace la ranita, sin embargo, no se muestra una especificación completa sobre los saltos subsecuentes que hace la ranita debido a que al intentar implementar lo anterior se tenía sobreflujo en el código. Por lo que se propuso una solución donde en lugar de especificar los saltos subscuentes que realiza la ranita, se imprimia un Hint sobre como tenía que empezar a saltar la ranita"
 
 # ╔═╡ c1a7d527-cdf2-42f4-8c79-04243a1fab2a
 md"Asignemos un valor a _x_"
@@ -260,11 +263,17 @@ for x in 3:3 #para x igual a 3
 	println("$(tres(x))") #Imprimir Hint
 end
 
+# ╔═╡ 8a1b775a-07c0-4b73-8831-d156e04ec886
+html"""<font color='orange'>Bien hecho, aunque deben tener más cuidado con su ortografía; en particular, faltan muchos acentos (puse algunos para que lo comparen con lo que entregaron). <b>(5/5 puntos)</b></font>"""
+
 # ╔═╡ 415cca13-80d0-42af-884d-71b6c3f407cf
 md"3. Reflexiona sobre la complejidad temporal y espacial de tu algoritmo. ¿Cómo cambia el tiempo de ejecución de tu programa conforme crece n?, ¿cómo cambia el espacio ocupado en la memoria de la máquina conforme incrementa n? (1 punto)
 
 Conforme crece el valor de _n_ el tiempo va incrementando de forma notoria si lo calculamos dentro de un rango, por ejemplo, para un valor de _1:n=4_ el tiempo de ejecución es de:798 microsegundos, sin embargo para una _1:n=45_ el tiempo de ejecución es de 116 segundos, por lo que mientras más grande sea el valor de _n_, más tiempo tendremos que esperar para que se ejecute el programa, análogo a este caso, sucede cuando pedimos el valor de saltos para un número de rocas específico, ya que tarda un poco más de tiempo para ejecutar el programa.
 Ahora, para el espacio ocupado en la memoria es importante ver que los datos obtenidos crecen de forma constante, claramente conforme mayor valor de _n_ se tome mayor espacio se va a ocupar. Para ser mas puntual, si pedimos el rango de _1:100_ entonces se ocupa más memoria, por otro lado, si tomamos un valor en espefico, por ejemplo el numero de saltos para _n=5_ entonces si hay un incremento de memoria, pero es menos significativo." 
+
+# ╔═╡ 1029d3f8-821e-4620-84e0-4f88f5c5ed02
+html"<font color='orange'> Me hubiera gustado que elaboraran un poco más, especificando por ejemplo la importancia de calcular promedios de tiempo y la validez que tiene (o no) hacer este tipo de pruebas en sólo una computadora. <b>(0.75/1 punto)</b> </font>"
 
 # ╔═╡ c94ed0c8-7569-4213-adac-484e639c237c
 md"4. Reflexiona sobre el valor máximo que puede tomar n de tal forma que no haya sobreflujo en tus resultados de N **(1 punto)**.
@@ -272,14 +281,21 @@ md"4. Reflexiona sobre el valor máximo que puede tomar n de tal forma que no ha
 Para el valor máximo que puede tomar n para evitar el sobreflujo es importante ver que nuestro código esta compuesto por ciclos for, por lo visto en clase sabemos que estos ciclos, son ejecutados de forma iterativa, lo cual nos evita el tener un sobreflujo en las salidas, ya que a cada iteración se le asigna el valor del elemento que en ese momento este en turno.
 Sin embargo si tomamos en cuenta un rango, como por ejemplo _n:45_ ,entonces, si encontramos un sobreflujo en los resultados obtenidos. Debido a que no solo se imprimen las opciones que tiene la ranita para saltar, si no, que tambien se imprimen las especificaciones de los saltos."
 
+# ╔═╡ 55a97181-baa2-4e33-a657-22b88aa810d0
+html"<font color='orange'> Creo que tienen una confusión en cuanto a sobreflujo. Éste no depende de qué tipo de ciclos se utilicen, sino del tipo de <i>dato</i> utilizado, pues eso determina la cantidad de memoria que la computadora utiliza para almacenar cada dato lo que, a su vez, determina el rango de números que pueden ser representados fielmente (i.e. sin pérdida de información) por ese tipo de dato. Repasen el <i>notebook</i> <code>1.1-Operadores_aritméticos_y_tipos_de_datos_numéricos.ipynb</code> <b>(0/1 punto)</b>.</font>"
+
+# ╔═╡ ae6b46ff-87fa-4553-82d3-1ece5f00ace9
+html"<font color='orange'> Calificación de este <i>notebook</i>: <b>8.75</b>. La calificación del proyecto intermedio es el promedio de las calificaciones de los dos <i>notebooks</i> entregados.</font>"
+
 # ╔═╡ Cell order:
-# ╠═2fa0e4c0-21b5-4b0e-a638-6398b878cb22
+# ╟─2fa0e4c0-21b5-4b0e-a638-6398b878cb22
 # ╟─47cf9050-d776-45dc-a472-ab341566cf2b
 # ╟─74d8ad73-4820-488d-a467-229e2df7b4c5
 # ╠═d4689244-7352-4a26-be0d-822c3312c456
 # ╟─cbaba34f-04dd-4cc1-bbf4-67b6a7de7a0f
 # ╟─c786b1b3-daeb-4a1b-a656-a89e9260d486
 # ╟─8a628730-0cf0-485d-9c87-e2e1118538e0
+# ╟─e6dfa89b-1ad8-4e31-bd55-37365ff4cf4d
 # ╟─588c8811-3b8e-4b46-9fff-c17f1b6f19f5
 # ╠═5dd7e918-797d-4464-8282-9fbb51469673
 # ╠═da5f6504-f13f-429a-9d53-a00049d0fff2
@@ -297,5 +313,9 @@ Sin embargo si tomamos en cuenta un rango, como por ejemplo _n:45_ ,entonces, si
 # ╠═d4317610-997b-48db-be27-9313be485c99
 # ╠═a9663d07-c967-451a-a1db-edf05ee01e0b
 # ╠═c830b7a1-cdef-4ff1-8abe-827dcac67e37
+# ╟─8a1b775a-07c0-4b73-8831-d156e04ec886
 # ╟─415cca13-80d0-42af-884d-71b6c3f407cf
+# ╟─1029d3f8-821e-4620-84e0-4f88f5c5ed02
 # ╟─c94ed0c8-7569-4213-adac-484e639c237c
+# ╟─55a97181-baa2-4e33-a657-22b88aa810d0
+# ╟─ae6b46ff-87fa-4553-82d3-1ece5f00ace9
